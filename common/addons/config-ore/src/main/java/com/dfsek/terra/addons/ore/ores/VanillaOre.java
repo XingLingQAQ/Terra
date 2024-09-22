@@ -7,10 +7,6 @@
 
 package com.dfsek.terra.addons.ore.ores;
 
-import java.util.BitSet;
-import java.util.Map;
-import java.util.Random;
-
 import com.dfsek.terra.api.block.BlockType;
 import com.dfsek.terra.api.block.state.BlockState;
 import com.dfsek.terra.api.structure.Structure;
@@ -19,6 +15,10 @@ import com.dfsek.terra.api.util.Rotation;
 import com.dfsek.terra.api.util.collection.MaterialSet;
 import com.dfsek.terra.api.util.vector.Vector3Int;
 import com.dfsek.terra.api.world.WritableWorld;
+
+import java.util.BitSet;
+import java.util.Map;
+import java.util.Random;
 
 import static com.dfsek.terra.addons.ore.utils.VanillaOreUtils.shouldPlace;
 

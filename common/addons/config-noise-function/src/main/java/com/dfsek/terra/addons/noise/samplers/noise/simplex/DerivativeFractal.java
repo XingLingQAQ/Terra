@@ -27,8 +27,8 @@ public class DerivativeFractal implements DerivativeNoiseSampler {
     }
 
     private static float[] baseNoise(float px, float py) {
-        float ix = (float)Math.floor(px);
-        float iy = (float)Math.floor(py);
+        float ix = (float) Math.floor(px);
+        float iy = (float) Math.floor(py);
         float fx = px - ix;
         float fy = py - iy;
 
@@ -58,10 +58,12 @@ public class DerivativeFractal implements DerivativeNoiseSampler {
         float vc = dot(gcx, gcy, fx, fy - 1);
         float vd = dot(gdx, gdy, fx - 1, fy - 1);
 
-        float u2x = gax + (gbx - gax) * ux + (gcx - gax) * uy + (gax - gbx - gcx + gdx) * ux * uy + dux * (uy * (va - vb - vc + vd) + vb - va);
-        float u2y = gay + (gby - gay) * ux + (gcy - gay) * uy + (gay - gby - gcy + gdy) * ux * uy + duy * (ux * (va - vb - vc + vd) + vc - va);
+        float u2x =
+            gax + (gbx - gax) * ux + (gcx - gax) * uy + (gax - gbx - gcx + gdx) * ux * uy + dux * (uy * (va - vb - vc + vd) + vb - va);
+        float u2y =
+            gay + (gby - gay) * ux + (gcy - gay) * uy + (gay - gby - gcy + gdy) * ux * uy + duy * (ux * (va - vb - vc + vd) + vc - va);
 
-        return new float[] { va + ux * (vb - va) + uy * (vc - va) + ux * uy * (va - vb - vc + vd), u2x, u2y };
+        return new float[]{ va + ux * (vb - va) + uy * (vc - va) + ux * uy * (va - vb - vc + vd), u2x, u2y };
     }
 
     @Override
@@ -77,7 +79,7 @@ public class DerivativeFractal implements DerivativeNoiseSampler {
         float heightFreq = 1.0f;
         float heightAmp = 1f;
         float cumAmp = 0.0f;
-        for (int i = 0; i < heightOctaves; i++) {
+        for(int i = 0; i < heightOctaves; i++) {
             float[] noise = baseNoise((float) (x * heightFreq), (float) (y * heightFreq));
             out[0] += noise[0] * heightAmp;
             out[1] += noise[1] * heightAmp * heightFreq;

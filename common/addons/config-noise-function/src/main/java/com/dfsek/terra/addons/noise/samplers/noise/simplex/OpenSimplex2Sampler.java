@@ -7,9 +7,6 @@
 
 package com.dfsek.terra.addons.noise.samplers.noise.simplex;
 
-import com.dfsek.terra.api.noise.DerivativeNoiseSampler;
-
-
 /**
  * NoiseSampler implementation to provide OpenSimplex2 noise.
  */
