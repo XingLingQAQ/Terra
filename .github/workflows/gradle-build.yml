@@ -45,3 +45,11 @@ jobs:
           properties: |
             kotlin.js.compiler=ir
             kotlin.parallel.tasks.in.project=true
+      - uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+           repo_token: "${{ secrets.GITHUB_TOKEN }}"
+           automatic_release_tag: "Dev-7.0-2"
+           prerelease: false
+           title: "Dev-7.0-2"
+           files: |
+             platforms/bukkit/build/libs/*.jar
