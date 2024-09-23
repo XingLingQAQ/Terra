@@ -48,8 +48,8 @@ jobs:
       - uses: "marvinpinto/action-automatic-releases@latest"
         with:
            repo_token: "${{ secrets.GITHUB_TOKEN }}"
-           automatic_release_tag: "Ver-6.5.0"
+           automatic_release_tag: "6.5.0"
            prerelease: false
-           title: "Ver-6.5.0"
+           title: "6.5.0"
            files: |
              platforms/bukkit/build/libs/*.jar
