@@ -8,7 +8,7 @@ import com.dfsek.terra.addons.noise.samplers.noise.PseudoErosionSampler;
 import com.dfsek.terra.api.noise.DerivativeNoiseSampler;
 
 
-public class PseudoErosionTemplate extends SamplerTemplate<PseudoErosionSampler> {
+public class PseudoErosionTemplate extends NoiseTemplate<PseudoErosionSampler> {
 
     @Value("octaves")
     @Default
@@ -63,8 +63,9 @@ public class PseudoErosionTemplate extends SamplerTemplate<PseudoErosionSampler>
 
     @Override
     public PseudoErosionSampler get() {
-        return new PseudoErosionSampler(octaves, gain, lacunarity,
-            slopeStrength, branchStrength, strength,
-            erosionFrequency, heightSampler, slopeMask, slopeMaskFull, slopeMaskNone, jitterModifier, averageErosionImpulses);
+        PseudoErosionSampler pseudoErosionSampler = new PseudoErosionSampler(octaves, lacunarity, gain, slopeStrength, branchStrength, strength, erosionFrequency, heightSampler, slopeMask, slopeMaskNone, slopeMaskFull, jitterModifier, averageErosionImpulses);
+        pseudoErosionSampler.setFrequency(frequency);
+        pseudoErosionSampler.setSalt(salt);
+        return pseudoErosionSampler;
     }
 }

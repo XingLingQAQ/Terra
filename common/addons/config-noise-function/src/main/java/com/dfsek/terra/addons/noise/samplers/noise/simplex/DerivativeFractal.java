@@ -19,13 +19,11 @@ public class DerivativeFractal extends DerivativeNoiseFunction {
     private final int heightOctaves;
     private final double heightGain;
     private final double heightLacunarity;
-    private final double frequency;
 
-    public DerivativeFractal(int octaves, double gain, double lacunarity, double frequency) {
+    public DerivativeFractal(int octaves, double gain, double lacunarity) {
         this.heightOctaves = octaves;
         this.heightGain = gain;
         this.heightLacunarity = lacunarity;
-        this.frequency = frequency;
     }
 
     private static float[] baseNoise(float px, float py) {
@@ -75,8 +73,6 @@ public class DerivativeFractal extends DerivativeNoiseFunction {
 
     @Override
     public double[] noised(long seed, double x, double y) {
-        x *= frequency;
-        y *= frequency;
         double[] out = { 0.0f, 0.0f, 0.0f };
         float heightFreq = 1.0f;
         float heightAmp = 1f;

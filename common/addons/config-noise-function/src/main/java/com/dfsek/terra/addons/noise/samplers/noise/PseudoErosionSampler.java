@@ -71,11 +71,6 @@ public class PseudoErosionSampler extends NoiseFunction {
         return (x - (float) Math.floor(x));
     }
 
-    public static double exp(double val) {
-        final long tmp = (long) (1512775 * val + 1072632447);
-        return Double.longBitsToDouble(tmp << 32);
-    }
-
     public static float smoothstep(float edge0, float edge1, float x) {
         // Scale, bias and saturate x to 0..1 range
         x = clamp((x - edge0) / (edge1 - edge0), 0.0f, 1.0f);
@@ -183,6 +178,6 @@ public class PseudoErosionSampler extends NoiseFunction {
 
     @Override
     public double getNoiseRaw(long seed, double x, double y, double z) {
-        return noise(seed, x, z);
+        return getNoiseRaw(seed, x, z);
     }
 }
