@@ -52,4 +52,4 @@ jobs:
            prerelease: false
            title: "Ver-6.5.0"
            files: |
-             platforms/bukkit/build/*.jar
+             platforms/bukkit/build/libs/*.jar
