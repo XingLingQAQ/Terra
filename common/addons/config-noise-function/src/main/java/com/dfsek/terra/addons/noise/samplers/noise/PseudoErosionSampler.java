@@ -2,11 +2,10 @@ package com.dfsek.terra.addons.noise.samplers.noise;
 
 
 import com.dfsek.terra.api.noise.DerivativeNoiseSampler;
-import com.dfsek.terra.api.noise.NoiseSampler;
 import com.dfsek.terra.api.util.MathUtil;
 
 
-public class PseudoErosion implements NoiseSampler {
+public class PseudoErosionSampler extends NoiseFunction {
     public static final float TAU = (float) (2.0 * Math.PI);
     private static final float HASH_X = 0.3183099f;
     private static final float HASH_Y = 0.3678794f;
@@ -26,10 +25,10 @@ public class PseudoErosion implements NoiseSampler {
     private final double maxCellDistSqRecip;
     private final boolean averageErosionImpulses;
 
-    public PseudoErosion(int octaves, double gain, double lacunarity, double slopeStrength, double branchStrength, double erosionStrength,
-                         double erosionFrequency, DerivativeNoiseSampler sampler,
-                         boolean slopeMask, double slopeMaskFull, double slopeMaskNone, double jitterModifier,
-                         boolean averageErosionImpulses) {
+    public PseudoErosionSampler(int octaves, double gain, double lacunarity, double slopeStrength, double branchStrength, double erosionStrength,
+                                double erosionFrequency, DerivativeNoiseSampler sampler,
+                                boolean slopeMask, double slopeMaskFull, double slopeMaskNone, double jitterModifier,
+                                boolean averageErosionImpulses) {
         this.octaves = octaves;
         this.gain = gain;
         this.lacunarity = lacunarity;
@@ -178,12 +177,12 @@ public class PseudoErosion implements NoiseSampler {
     }
 
     @Override
-    public double noise(long seed, double x, double y) {
+    public double getNoiseRaw(long seed, double x, double y) {
         return heightMap(seed, (float) x, (float) y);
     }
 
     @Override
-    public double noise(long seed, double x, double y, double z) {
+    public double getNoiseRaw(long seed, double x, double y, double z) {
         return noise(seed, x, z);
     }
 }

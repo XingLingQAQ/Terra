@@ -1,18 +1,20 @@
 package com.dfsek.terra.addons.noise.samplers.noise.simplex;
 
+import com.dfsek.terra.addons.noise.samplers.noise.DerivativeNoiseFunction;
+import com.dfsek.terra.addons.noise.samplers.noise.PseudoErosionSampler;
 import com.dfsek.terra.api.noise.DerivativeNoiseSampler;
 
-import static com.dfsek.terra.addons.noise.samplers.noise.PseudoErosion.dot;
-import static com.dfsek.terra.addons.noise.samplers.noise.PseudoErosion.hash;
-import static com.dfsek.terra.addons.noise.samplers.noise.PseudoErosion.hashX;
-import static com.dfsek.terra.addons.noise.samplers.noise.PseudoErosion.hashY;
+import static com.dfsek.terra.addons.noise.samplers.noise.PseudoErosionSampler.dot;
+import static com.dfsek.terra.addons.noise.samplers.noise.PseudoErosionSampler.hash;
+import static com.dfsek.terra.addons.noise.samplers.noise.PseudoErosionSampler.hashX;
+import static com.dfsek.terra.addons.noise.samplers.noise.PseudoErosionSampler.hashY;
 
 
 /**
  * Temporary sampler that provides derivatives to test pseudoerosion, should be replaced with
  * derivative versions of existing samplers
  */
-public class DerivativeFractal implements DerivativeNoiseSampler {
+public class DerivativeFractal extends DerivativeNoiseFunction {
 
     private final int heightOctaves;
     private final double heightGain;
@@ -37,21 +39,21 @@ public class DerivativeFractal implements DerivativeNoiseSampler {
         float dux = fx * fx * 30.0f * (fx * (fx - 2.0f) + 1.0f);
         float duy = fy * fy * 30.0f * (fy * (fy - 2.0f) + 1.0f);
 
-        float gan = hash(ix, iy);
-        float gax = hashX(gan);
-        float gay = hashY(gan);
+        float gan = PseudoErosionSampler.hash(ix, iy);
+        float gax = PseudoErosionSampler.hashX(gan);
+        float gay = PseudoErosionSampler.hashY(gan);
 
-        float gbn = hash(ix + 1, iy);
-        float gbx = hashX(gbn);
-        float gby = hashY(gbn);
+        float gbn = PseudoErosionSampler.hash(ix + 1, iy);
+        float gbx = PseudoErosionSampler.hashX(gbn);
+        float gby = PseudoErosionSampler.hashY(gbn);
 
-        float gcn = hash(ix, iy + 1);
-        float gcx = hashX(gcn);
-        float gcy = hashY(gcn);
+        float gcn = PseudoErosionSampler.hash(ix, iy + 1);
+        float gcx = PseudoErosionSampler.hashX(gcn);
+        float gcy = PseudoErosionSampler.hashY(gcn);
 
-        float gdn = hash(ix + 1, iy + 1);
-        float gdx = hashX(gdn);
-        float gdy = hashY(gdn);
+        float gdn = PseudoErosionSampler.hash(ix + 1, iy + 1);
+        float gdx = PseudoErosionSampler.hashX(gdn);
+        float gdy = PseudoErosionSampler.hashY(gdn);
 
         float va = dot(gax, gay, fx, fy);
         float vb = dot(gbx, gby, fx - 1, fy);
@@ -95,17 +97,22 @@ public class DerivativeFractal implements DerivativeNoiseSampler {
     }
 
     @Override
-    public double[] noised(long seed, double x, double y, double z) {
-        return noised(seed, x, z);
+    public double[] getNoisedRaw(long seed, double x, double y) {
+        return noised(seed, x, y);
     }
 
     @Override
-    public double noise(long seed, double x, double y) {
+    public double[] getNoisedRaw(long seed, double x, double y, double z) {
+        return noised(seed, x, y, z);
+    }
+
+    @Override
+    public double getNoiseRaw(long seed, double x, double y) {
         return noised(seed, x, y)[0];
     }
 
     @Override
-    public double noise(long seed, double x, double y, double z) {
+    public double getNoiseRaw(long seed, double x, double y, double z) {
         return noised(seed, x, y, z)[0];
     }
 }

@@ -4,11 +4,11 @@ import com.dfsek.tectonic.api.config.template.annotations.Default;
 import com.dfsek.tectonic.api.config.template.annotations.Value;
 
 import com.dfsek.terra.addons.noise.config.templates.SamplerTemplate;
-import com.dfsek.terra.addons.noise.samplers.noise.PseudoErosion;
+import com.dfsek.terra.addons.noise.samplers.noise.PseudoErosionSampler;
 import com.dfsek.terra.api.noise.DerivativeNoiseSampler;
 
 
-public class PseudoErosionTemplate extends SamplerTemplate<PseudoErosion> {
+public class PseudoErosionTemplate extends SamplerTemplate<PseudoErosionSampler> {
 
     @Value("octaves")
     @Default
@@ -62,8 +62,8 @@ public class PseudoErosionTemplate extends SamplerTemplate<PseudoErosion> {
     private boolean averageErosionImpulses = true;
 
     @Override
-    public PseudoErosion get() {
-        return new PseudoErosion(octaves, gain, lacunarity,
+    public PseudoErosionSampler get() {
+        return new PseudoErosionSampler(octaves, gain, lacunarity,
             slopeStrength, branchStrength, strength,
             erosionFrequency, heightSampler, slopeMask, slopeMaskFull, slopeMaskNone, jitterModifier, averageErosionImpulses);
     }
