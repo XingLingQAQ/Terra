@@ -32,7 +32,7 @@ jobs:
       id: extract_version
       run: |
         # 提取 platforms 项目的版本号
-        VERSION=$(grep -E 'versionProjects\(":platforms", version\(' build.gradle | \
+        VERSION=$(grep -E 'versionProjects\(":platforms", version\(' build.gradle.kts | \
                   sed -E 's/.*version\(["'\''](.*)["'\'']\).*/\1/')
         echo "Extracted platforms version: $VERSION"
         echo "version=$VERSION" >> $GITHUB_OUTPUT
