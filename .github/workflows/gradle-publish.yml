@@ -1,0 +1,87 @@
+name: Minecraft Auto Release
+
+on:
+  push:
+    branches:
+      - main  # 在推送到主分支时触发
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # 获取完整提交历史
+        ref: ${{ github.ref }}
+
+    - name: Set up Java
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'temurin'
+        java-version: 17
+
+    - name: Make Gradlew Executable
+      run: chmod +x gradlew
+
+    - name: Build with Gradle
+      run: ./gradlew build
+
+    - name: Extract Platforms Version
+      id: extract_version
+      run: |
+        # 提取 platforms 项目的版本号
+        VERSION=$(grep -E 'versionProjects\(":platforms", version\(' build.gradle | \
+                  sed -E 's/.*version\(["'\''](.*)["'\'']\).*/\1/')
+        echo "Extracted platforms version: $VERSION"
+        echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+    - name: Get Commit Messages
+      id: changelog
+      run: |
+        # 获取上次发布以来的提交信息
+        LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+        if [ -z "$LATEST_TAG" ]; then
+          LOG=$(git log --format="- %s (%h)")
+        else
+          LOG=$(git log $LATEST_TAG..HEAD --format="- %s (%h)")
+        fi
+        # 多行内容转义处理
+        LOG="${LOG//'%'/'%25'}"
+        LOG="${LOG//$'\n'/'%0A'}"
+        echo "body=$LOG" >> $GITHUB_OUTPUT
+
+    - name: Check if tag exists
+      id: check_tag
+      run: |
+        # 检查版本对应的标签是否存在
+        TAG_NAME="v${{ steps.extract_version.outputs.version }}"
+        if git rev-parse $TAG_NAME >/dev/null 2>&1; then
+          echo "Tag $TAG_NAME already exists"
+          echo "tag_exists=true" >> $GITHUB_OUTPUT
+        else
+          echo "Tag $TAG_NAME does not exist, will create it"
+          echo "tag_exists=false" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Create new tag if not exists
+      if: steps.check_tag.outputs.tag_exists == 'false'
+      run: |
+        # 创建新标签
+        TAG_NAME="v${{ steps.extract_version.outputs.version }}"
+        git config user.name "GitHub Actions"
+        git config user.email "actions@github.com"
+        git tag -a $TAG_NAME -m "Release $TAG_NAME"
+        git push origin $TAG_NAME
+
+    - name: Create Release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: v${{ steps.extract_version.outputs.version }}
+        release_name: Release ${{ steps.extract_version.outputs.version }}
+        body: ${{ steps.changelog.outputs.body }}
+        draft: false
+        prerelease: false
